@@ -1,7 +1,7 @@
-import "./App.css";
-import { useState } from "react";
-import { z } from "zod";
-import { create } from "zustand";
+import './App.css';
+import { useState } from 'react';
+import { z } from 'zod';
+import { create } from 'zustand';
 
 // Define the Zustand store
 interface Address {
@@ -29,17 +29,17 @@ const useAddressStore = create<AddressStore>((set) => ({
 
 const App = () => {
   const [formData, setFormData] = useState({
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,21 +48,21 @@ const App = () => {
   };
 
   const schema = z.object({
-    street: z.string().nonempty("Street is required"),
-    city: z.string().nonempty("City is required"),
-    state: z.string().nonempty("State is required"),
-    zip: z.string().regex(/^\d{5}$/, "Zip Code must be 5 digits"),
+    street: z.string().nonempty('Street is required'),
+    city: z.string().nonempty('City is required'),
+    state: z.string().nonempty('State is required'),
+    zip: z.string().regex(/^\d{5}$/, 'Zip Code must be 5 digits'),
   });
 
   const validate = () => {
     try {
       schema.parse(formData);
-      setErrors({ street: "", city: "", state: "", zip: "" });
+      setErrors({ street: '', city: '', state: '', zip: '' });
       return true;
     } catch (e) {
       const newErrors = (e as z.ZodError).errors
         .map((error) => {
-          if (typeof error.path[0] === "string") {
+          if (typeof error.path[0] === 'string') {
             return { [error.path[0]]: error.message };
           }
           return {};
@@ -77,11 +77,27 @@ const App = () => {
   const deleteAddress = useAddressStore((state) => state.deleteAddress);
   const addresses = useAddressStore((state) => state.addresses);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
       addAddress(formData);
-      setFormData({ street: "", city: "", state: "", zip: "" });
+      try {
+        const response = await fetch('http://localhost:3001/api/address', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) {
+          console.log('Address sent to backend');
+        } else {
+          console.error('Failed to send address to backend');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+      setFormData({ street: '', city: '', state: '', zip: '' });
     }
   };
 

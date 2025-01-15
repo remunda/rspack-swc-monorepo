@@ -3,9 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "rsbuild build",
-    "check": "biome check --write",
-    "dev": "rsbuild dev --open",
+    "dev:fe": "yarn workspace frontend dev",
+    "dev:be": "yarn workspace backend dev",
+    "dev": "yarn workspaces foreach -A --include backend --include frontend --parallel --jobs unlimited -v -i run dev",
     "format": "biome format --write",
     "preview": "rsbuild preview"
   },
@@ -23,5 +23,9 @@
     "@types/react-dom": "^19.0.0",
     "typescript": "^5.7.2"
   },
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  "packageManager": "yarn@4.6.0",
+  "workspaces": [
+    "packages/frontend",
+    "packages/backend"
+  ]
 }
