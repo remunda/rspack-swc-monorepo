@@ -6,7 +6,7 @@ export default defineConfig({
   source:{
     entry: 
     {
-      index: './index.tsx'
+      index: './src/index.tsx'
     },
   }
 });
