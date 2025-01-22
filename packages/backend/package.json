@@ -6,19 +6,19 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node src/index.ts",
-    "build": "tsc && swc . -s -d dist"
+    "build": "tsc && swc src -s -d dist"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "5.0.1"
   },
   "devDependencies": {
-    "@swc/cli": "^0.1.51",
+    "@swc/cli": "0.6.0",
     "@swc/core": "^1.2.127",
     "@types/cors": "^2",
     "@types/express": "^5.0.0",
-    "@types/node": "^16.11.7",
+    "@types/node": "22.10.0",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "5.7.3"
   }
 }
